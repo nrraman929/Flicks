@@ -37,6 +37,8 @@ GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
 Describe any challenges encountered while building the app.
 
+No challenges were encountered at this point.
+
 ## License
 
     Copyright 2016 Nishant Raman
