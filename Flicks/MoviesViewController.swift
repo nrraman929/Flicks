@@ -18,6 +18,7 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
     var hud : MBProgressHUD?
     var refreshControl: UIRefreshControl!
     
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -53,6 +54,7 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
                             NSLog("response: \(responseDictionary)")
                             self.hud!.hide(true)
                             self.movies = (responseDictionary["results"] as! [NSDictionary])
+                            
                             self.tableView.reloadData()
                     }
                 }
@@ -86,11 +88,34 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         var imageURL = NSURL(string: "")
         if posterPath != nil { imageURL = NSURL(string: baseURL
             + posterPath!)! }
-        
+        let request = NSURLRequest(URL: imageURL!)
         cell.titleLabel.text = title
         cell.overviewLabel.text = overview
-        if imageURL!.absoluteString != "" {cell.posterView.setImageWithURL(imageURL!)}
-        else { cell.posterView.image = UIImage(named: "questionmark-512")}
+        /*if imageURL!.absoluteString != "" {cell.posterView.setImageWithURL(imageURL!)}
+        else { cell.posterView.image = UIImage(named: "questionmark-512")}*/
+        
+        cell.posterView.setImageWithURLRequest(
+            request,
+            placeholderImage: nil,
+            success: { (imageRequest, imageResponse, image) -> Void in
+                
+                // imageResponse will be nil if the image is cached
+                if imageResponse != nil {
+                    //print("Image was NOT cached, fade in image")
+                    cell.posterView.alpha = 0.0
+                    cell.posterView.image = image
+                    UIView.animateWithDuration(0.3, animations: { () -> Void in
+                        cell.posterView.alpha = 1.0
+                    })
+                } else {
+                    //print("Image was cached so just update the image")
+                    cell.posterView.image = image
+                }
+            },
+            failure: { (imageRequest, imageResponse, error) -> Void in
+                // do something for the failure condition
+                cell.posterView.image = UIImage(named: "questionmark-512")
+        })
         
         
         //cell.textLabel!.text = title //"row \(indexPath.row)"
