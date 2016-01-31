@@ -165,6 +165,10 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
             let colCell = collectionView.dequeueReusableCellWithReuseIdentifier("CollectionCell", forIndexPath: indexPath) as! MovieCollectionCell
             
+            let backgroundView = UIView()
+            backgroundView.backgroundColor = UIColor.grayColor()
+            colCell.selectedBackgroundView = backgroundView
+            
             let movie = movies![indexPath.row]
             //let title = movie["title"] as! String
             //let overview = movie["overview"] as! String
